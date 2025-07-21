@@ -10,7 +10,7 @@ FROM base AS build
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build:prod
 
 FROM base AS production
 ENV NODE_ENV=production

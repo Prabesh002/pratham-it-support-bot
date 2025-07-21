@@ -148,11 +148,6 @@ export default class SystemStatusFeature implements IFeatureModule {
   public register(container: DependencyContainer): void {
     container.register(ICommand, { useClass: StatusCommand });
   }
-
-  public initialize(bot: Bot<BotContext>, container: DependencyContainer): void {
-    const command = container.resolve(StatusCommand);
-    bot.command(command.command, (ctx) => command.handle(ctx));
-  }
 }
 ```
 

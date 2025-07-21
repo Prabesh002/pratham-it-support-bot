@@ -4,7 +4,7 @@ import { LoggerService } from '@/utils/logger';
 import { LoginRequest, LoginResponse } from '../models/auth.dto';
 import { LOGIN_USER_ENDPOINT } from '../constants/chat.auth.endpoints';
 import { IAuthService } from '../interfaces/IAuthService';
-import { IApiService } from '../interfaces/IApiService';
+import { IAiApiService } from '../interfaces/IAiApiService';
 import { toError } from '@/utils/ErrorUtils';
 
 @injectable()
@@ -15,7 +15,7 @@ export class AuthService implements IAuthService {
   constructor(
     @inject(Config) private readonly config: Config,
     @inject(LoggerService) private readonly logger: LoggerService,
-    @inject(IApiService) private readonly apiService: IApiService,
+    @inject(IAiApiService) private readonly apiService: IAiApiService,
   ) {}
 
   public getAccessToken(): string | null {

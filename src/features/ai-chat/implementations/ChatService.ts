@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 import { BotContext } from '@/core/models/context.model';
 import { LoggerService } from '@/utils/logger';
 import { IChatService } from '../interfaces/IChatService';
-import { IApiService } from '@/shared/api/interfaces/IApiService';
+import { IAiApiService } from '@/shared/api/interfaces/IAiApiService';
 import { CreateChatRequest, CreateChatSessionResponse, StreamChatRequest } from '@/shared/api/models/chat.dto';
 import { CREATE_CHAT_ENDPOINT, STREAM_CHAT_ENDPOINT } from '@/shared/api/constants/chat.auth.endpoints';
 import { CallbackQueryContext, CommandContext, Filter } from 'grammy';
@@ -12,7 +12,7 @@ import { toError } from '@/utils/ErrorUtils';
 export class ChatService implements IChatService {
   constructor(
     @inject(LoggerService) private readonly logger: LoggerService,
-    @inject(IApiService) private readonly apiService: IApiService,
+    @inject(IAiApiService) private readonly apiService: IAiApiService,
   ) {}
 
   public async initiateChat(ctx: CallbackQueryContext<BotContext>): Promise<void> {

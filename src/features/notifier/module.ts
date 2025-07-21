@@ -6,6 +6,9 @@ import { IFeatureModule } from '@/core/interfaces/IFeatureModule';
 import { INotificationService } from './interfaces/INotificationService';
 import { NotificationService } from './implementations/NotificationService';
 import { NotificationController } from './controllers/NotificationController';
+import { RegisterGroupCommand } from './commands/RegisterGroupCommand';
+import { ICommand } from '@/core/interfaces/IHandler';
+
 
 export default class NotifierFeature implements IFeatureModule {
   public readonly name = 'notifier';
@@ -13,6 +16,7 @@ export default class NotifierFeature implements IFeatureModule {
   public register(container: DependencyContainer): void {
     container.registerSingleton<INotificationService>(INotificationService, NotificationService);
     container.register(NotificationController, { useClass: NotificationController });
+    container.register(ICommand, { useClass: RegisterGroupCommand });
   }
 
   public initialize(botId: string, _bot: Bot<BotContext>, container: DependencyContainer, app: Express): void {

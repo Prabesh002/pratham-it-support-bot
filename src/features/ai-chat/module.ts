@@ -20,22 +20,7 @@ export default class AiChatFeature implements IFeatureModule {
     container.registerSingleton<IChatService>(IChatService, ChatService);
   }
 
-  public initialize(_botId: string, bot: Bot<BotContext>, container: DependencyContainer, _app: Express): void {
-    const commands = container.resolveAll<ICommand>(ICommand);
-    commands.forEach(handler => bot.command(handler.command, (ctx) => handler.handle(ctx)));
-
-    const callbackHandlers = container.resolveAll<ICallbackQueryHandler>(ICallbackQueryHandler);
-    callbackHandlers.forEach(handler => bot.callbackQuery(handler.trigger, (ctx) => handler.handle(ctx)));
-
-    const messageHandlers = container.resolveAll<IMessageHandler>(IMessageHandler);
-    bot.on('message:text', async (ctx) => {
-        if (ctx.message.text.startsWith('/')) return;
-        for (const handler of messageHandlers) {
-            if (handler.canHandle(ctx)) {
-                await handler.handle(ctx);
-                return;
-            }
-        }
-    });
-  }
+    public initialize(_botId: string, _bot: Bot<BotContext>, _container: DependencyContainer, _app: Express): void {
+      
+    }
 }
