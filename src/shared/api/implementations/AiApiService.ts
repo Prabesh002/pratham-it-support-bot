@@ -7,11 +7,11 @@ import { ApiResponse } from '../models/api.dto';
 import { LOGIN_USER_ENDPOINT } from '../constants/chat.auth.endpoints';
 import { StreamChatRequest } from '../models/chat.dto';
 import { toError } from '@/utils/ErrorUtils';
-import { IApiService } from '../interfaces/IApiService';
+import { IAiApiService } from '../interfaces/IAiApiService';
 
 @injectable()
 @singleton()
-export class ApiService implements IApiService {
+export class AiApiService implements IAiApiService  {
   private readonly client: AxiosInstance;
 
   constructor(

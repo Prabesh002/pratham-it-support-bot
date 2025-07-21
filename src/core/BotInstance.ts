@@ -7,6 +7,8 @@ import { createInitialSessionData } from "./models/session.model";
 import { LoggerService } from "@/utils/logger";
 import { toError } from "@/utils/ErrorUtils";
 import { Express } from "express";
+import { BotHandlerService } from "./implementations/BotHandlerService";
+
 export class BotInstance {
   public readonly id: string;
   public readonly bot: Bot<BotContext>;
@@ -32,6 +34,9 @@ export class BotInstance {
 
     this.bot = new Bot<BotContext>(this.config.token);
     this.container.register<Bot<BotContext>>(Bot, { useValue: this.bot });
+    this.container.register<DependencyContainer>('DependencyContainer', { useValue: this.container });
+
+    this.container.registerSingleton(BotHandlerService);
 
     this.initializeMiddleware();
     this.registerAndInitializeFeatures();
@@ -66,16 +71,29 @@ export class BotInstance {
     this.config.enabledFeatures.forEach((featureName) => {
       const featureModule = this.featureRegistry.get(featureName);
       if (featureModule) {
-        this.logger.info(`[${this.id}] Applying feature: ${featureName}`);
+        this.logger.info(
+          `[${this.id}] Registering dependencies for feature: ${featureName}`
+        );
         featureModule.register(this.container);
-        featureModule.initialize(this.id, this.bot, this.container, this.app);
       } else {
         this.logger.warn(
           `[${this.id}] Feature "${featureName}" not found in registry.`
         );
       }
     });
+
+    const handlerService = this.container.resolve(BotHandlerService);
+    handlerService.registerHandlers(this.id);
+
+    this.config.enabledFeatures.forEach((featureName) => {
+      const featureModule = this.featureRegistry.get(featureName);
+      if (featureModule) {
+        this.logger.info(`[${this.id}] Initializing feature: ${featureName}`);
+        featureModule.initialize(this.id, this.bot, this.container, this.app);
+      }
+    });
   }
+
   public async start(): Promise<void> {
     this.logger.info(`[${this.id}] Starting bot...`);
     await this.bot.start({

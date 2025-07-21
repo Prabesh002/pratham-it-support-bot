@@ -16,6 +16,7 @@ const envSchema = z.object({
   AI_API_PASSWORD: z.string().min(1),
   WEB_APP_URL: z.string().url(),
   WEB_SERVER_PORT: z.string().default('8080'),
+  CRM_API_BASE_URL: z.string().url()
 });
 
 const botConfigSchema = z.object({
@@ -35,6 +36,7 @@ export class Config {
   public readonly aiApiPassword: string;
   public readonly webAppUrl: string;
   public readonly webServerPort: string;
+  public readonly crmApiBaseUrl: string;
 
   private botConfigs: IBotConfig[] = [];
 
@@ -55,6 +57,7 @@ export class Config {
     this.aiApiPassword = env.AI_API_PASSWORD;
     this.webAppUrl = env.WEB_APP_URL;
     this.webServerPort = env.WEB_SERVER_PORT;
+    this.crmApiBaseUrl = env.CRM_API_BASE_URL; 
   }
 
   public async loadBotConfigs(): Promise<void> {
